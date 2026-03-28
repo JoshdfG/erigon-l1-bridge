@@ -1,0 +1,30 @@
+[
+  {
+    "type": "function",
+    "name": "status",
+    "inputs": [],
+    "outputs": [{"name": "", "type": "uint8"}],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "rootClaim",
+    "inputs": [],
+    "outputs": [{"name": "", "type": "bytes32"}],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "l2BlockNumber",
+    "inputs": [],
+    "outputs": [{"name": "", "type": "uint256"}],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "resolvedAt",
+    "inputs": [],
+    "outputs": [{"name": "", "type": "uint64"}],
+    "stateMutability": "view"
+  }
+]
