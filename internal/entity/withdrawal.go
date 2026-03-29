@@ -4,11 +4,11 @@ package entity
 // It must exactly match the Solidity Types.WithdrawalTransaction layout.
 // See: optimism/packages/contracts-bedrock/src/libraries/Types.sol
 type WithdrawalTx struct {
-	Nonce    interface{} // *big.Int — using interface{} avoids import cycle; cast at use site
-	Sender   string      // address hex
-	Target   string      // address hex
-	Value    interface{} // *big.Int
-	GasLimit interface{} // *big.Int
+	Nonce    any    // *big.Int — using interface{} avoids import cycle; cast at use site
+	Sender   string // address hex
+	Target   string // address hex
+	Value    any    // *big.Int
+	GasLimit any    // *big.Int
 	Data     []byte
 }
 
@@ -35,28 +35,28 @@ type ProvenWithdrawal struct {
 type DisputeGameStatus uint8
 
 const (
-	GameInProgress    DisputeGameStatus = 0
+	GameInProgress     DisputeGameStatus = 0
 	GameChallengerWins DisputeGameStatus = 1
-	GameDefenderWins  DisputeGameStatus = 2
+	GameDefenderWins   DisputeGameStatus = 2
 )
 
 // DisputeGame holds the fields we query from a FaultDisputeGame proxy.
 type DisputeGame struct {
-	Index       uint64
-	Address     string            // proxy address on L1
-	GameType    uint32
-	Timestamp   uint64
-	RootClaim   [32]byte          // output root this game commits to
-	L2BlockNum  uint64
-	Status      DisputeGameStatus
-	ResolvedAt  uint64
+	Index      uint64
+	Address    string // proxy address on L1
+	GameType   uint32
+	Timestamp  uint64
+	RootClaim  [32]byte // output root this game commits to
+	L2BlockNum uint64
+	Status     DisputeGameStatus
+	ResolvedAt uint64
 }
 
 // WithdrawalProofData bundles everything needed to call proveWithdrawalTransaction.
 type WithdrawalProofData struct {
-	Tx                WithdrawalTx
-	DisputeGameIndex  uint64
-	OutputRootProof   OutputRootProof
-	WithdrawalProof   [][]byte // Merkle proof nodes from eth_getProof
-	WithdrawalHash    [32]byte // keccak256 of the encoded WithdrawalTx
+	Tx               WithdrawalTx
+	DisputeGameIndex uint64
+	OutputRootProof  OutputRootProof
+	WithdrawalProof  [][]byte // Merkle proof nodes from eth_getProof
+	WithdrawalHash   [32]byte // keccak256 of the encoded WithdrawalTx
 }
