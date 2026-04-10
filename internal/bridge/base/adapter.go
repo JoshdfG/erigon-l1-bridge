@@ -2,21 +2,22 @@
 //
 // The two-step withdrawal flow:
 //
-//  Step 1 — ProveWithdrawal
-//    a) Compute the withdrawalHash from the BridgeEvent's MessagePassed nonce + params
-//    b) Find a valid FaultDisputeGame on L1 whose L2 block number >= the withdrawal block
-//    c) Fetch the L2 output root proof: stateRoot + messagePasserStorageRoot + blockhash
-//       via eth_getProof on the L2ToL1MessagePasser predeploy
-//    d) Call OptimismPortal2.proveWithdrawalTransaction()
+//	Step 1 — ProveWithdrawal
+//	  a) Compute the withdrawalHash from the BridgeEvent's MessagePassed nonce + params
+//	  b) Find a valid FaultDisputeGame on L1 whose L2 block number >= the withdrawal block
+//	  c) Fetch the L2 output root proof: stateRoot + messagePasserStorageRoot + blockhash
+//	     via eth_getProof on the L2ToL1MessagePasser predeploy
+//	  d) Call OptimismPortal2.proveWithdrawalTransaction()
 //
-//  Step 2 — FinalizeWithdrawal (after 7-day challenge window)
-//    a) Check that the dispute game has resolved as DEFENDER_WINS
-//    b) Check that provenWithdrawals[hash][prover].timestamp + FINALIZATION_PERIOD has passed
-//    c) Call OptimismPortal2.finalizeWithdrawalTransaction()
+//	Step 2 — FinalizeWithdrawal (after 7-day challenge window)
+//	  a) Check that the dispute game has resolved as DEFENDER_WINS
+//	  b) Check that provenWithdrawals[hash][prover].timestamp + FINALIZATION_PERIOD has passed
+//	  c) Call OptimismPortal2.finalizeWithdrawalTransaction()
 //
 // Key contracts on L1 (Ethereum mainnet):
-//   OptimismPortalProxy:    0x49048044D57e1C92A77f79988d21Fa8fAF74E97e
-//   DisputeGameFactoryProxy: 0x43edB88C4B80fDD2AdFF2412A7BebF9dF42cB40e
+//
+//	OptimismPortalProxy:    0x49048044D57e1C92A77f79988d21Fa8fAF74E97e
+//	DisputeGameFactoryProxy: 0x43edB88C4B80fDD2AdFF2412A7BebF9dF42cB40e
 package base
 
 import (
@@ -45,7 +46,7 @@ var _ usecase.BridgeAdapter = (*Adapter)(nil)
 
 // Base mainnet L1 contract addresses (source: superchain-registry/addresses.json)
 const (
-	OptimismPortalProxyAddr    = "0x49048044D57e1C92A77f79988d21Fa8fAF74E97e"
+	OptimismPortalProxyAddr     = "0x49048044D57e1C92A77f79988d21Fa8fAF74E97e"
 	DisputeGameFactoryProxyAddr = "0x43edB88C4B80fDD2AdFF2412A7BebF9dF42cB40e"
 
 	// FaultDisputeGame game type used for permissionless withdrawals on Base.
@@ -704,7 +705,7 @@ func (a *Adapter) queryGameAtIndex(ctx context.Context, idx uint64) (string, uin
 func (a *Adapter) queryDisputeGame(ctx context.Context, proxyAddr string) (entity.DisputeGame, error) {
 	addr := common.HexToAddress(proxyAddr)
 
-	callAndUnpack := func(method string) ([]interface{}, error) {
+	callAndUnpack := func(method string) ([]any, error) {
 		data, err := a.gameABI.Pack(method)
 		if err != nil {
 			return nil, err
@@ -766,7 +767,8 @@ func (a *Adapter) computeWithdrawalHash(ctx context.Context, event entity.Bridge
 
 // computeWithdrawalHashFromTx ABI-encodes the WithdrawalTx and returns keccak256.
 // The hash must match:
-//   keccak256(abi.encode(nonce, sender, target, value, gasLimit, keccak256(data)))
+//
+//	keccak256(abi.encode(nonce, sender, target, value, gasLimit, keccak256(data)))
 func (a *Adapter) computeWithdrawalHashFromTx(wtx withdrawalTx) ([32]byte, error) {
 	// ABI type definitions for manual encoding
 	uint256Ty, _ := abi.NewType("uint256", "", nil)
