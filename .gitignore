@@ -4,3 +4,9 @@ bin/
 *.out
 /tmp
 vendor/
+contracts/out/
+contracts/cache/
+
+# Foundry paths inside the contracts folder
+contracts/out/
+contracts/cache/
